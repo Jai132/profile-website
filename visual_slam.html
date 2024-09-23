@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog Title 1">
+    <title>Visual-SLAM: How does it work?</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #f1f1f1ea;
+            font-family: 'SF Mono', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        a {
+            color: #05f140;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            font-size: 32px;
+        }
+        p {
+            line-height: 1.6;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Visual-SLAM: How does it work?</h1>
+        <p>Posted on 24 September, 2024</p>
+    </header>
+    <hr>
+    <article>
+        <p>
+            Visual-SLAM (Simultaneous Localization and Mapping) is an essential technology that helps systems like robots, drones, or even autonomous vehicles build a map of their surroundings while simultaneously determining their own position within that space. The concept might sound simple, but it’s a significant technical challenge because the system has to continuously calculate its location as it moves through a changing environment. Visual-SLAM, in particular, uses camera data to achieve this, making it a preferred solution for devices that need to operate in real-time while keeping hardware costs low.<br/><br/>
+
+To understand how Visual-SLAM works, imagine walking through an unfamiliar room with a camera. As you move, the camera captures images of the environment—walls, furniture, and objects scattered around. Visual-SLAM uses this stream of images to pick out unique points or landmarks within the room. These points could be the corners of a table, the edge of a window, or any detail that remains recognizable as the camera shifts angles. This is known as "feature extraction." Once these features are identified, the system tracks their movement from frame to frame, calculating how far they’ve moved and, by extension, how far the camera itself has moved.<br/><br/>
+
+A key aspect of SLAM is the use of these visual landmarks to build a map. As the device moves and the camera captures new parts of the scene, the system adds newly discovered features to its internal map. At the same time, it also tries to match the new images with previously captured ones to avoid duplicating landmarks. This process of continuously updating the map while keeping track of the camera’s movement is what makes SLAM both powerful and complex.<br/><br/>
+
+Now, this is where ORB-SLAM comes in as an example of a well-known Visual-SLAM system. ORB-SLAM is short for Oriented FAST and Rotated BRIEF SLAM, and it’s a real-time Visual-SLAM solution that has been widely used in robotics and computer vision. ORB-SLAM excels because it is able to identify key points from images efficiently, and it does so using two algorithms—FAST (Features from Accelerated Segment Test) and BRIEF (Binary Robust Independent Elementary Features).<br/><br/>
+FAST helps ORB-SLAM detect key points in the image, which are often sharp corners, strong edges, or other high-contrast areas that are easily trackable. BRIEF, on the other hand, is used to describe these key points by creating a unique “fingerprint” for each, allowing the system to recognize the same feature even if the camera looks at it from a different angle or distance. These key points are then matched across multiple frames, enabling ORB-SLAM to track the movement of the camera based on how the points shift relative to one another.<br/><br/>
+
+Once ORB-SLAM has a good set of key points, it uses them to estimate the camera’s position and orientation. This involves some complex math, where the system calculates how the key points move in 3D space relative to the camera’s motion. At the same time, ORB-SLAM uses this information to update its internal map of the environment. If the camera revisits an area it has seen before, ORB-SLAM can recognize the previously mapped features and correct its location estimate if necessary. This process, called "loop closure," helps reduce errors in the map over time, ensuring that it remains accurate even after long periods of use.<br/><br/>
+
+An important aspect of ORB-SLAM is that it can work with different types of cameras. It supports monocular cameras, which capture regular 2D images, stereo cameras, which provide depth information by using two lenses, and RGB-D cameras, which combine color images with depth data. By working with these different camera types, ORB-SLAM can be used in a variety of applications, from simple robots using a single webcam to advanced drones or autonomous vehicles with more sophisticated cameras.<br/><br/>
+
+The beauty of Visual-SLAM, especially in the case of ORB-SLAM, is that it doesn't rely on costly sensors like LIDAR, which is commonly used in other SLAM systems. Instead, it uses affordable cameras that are much easier to integrate into small, lightweight devices. This makes Visual-SLAM especially useful for consumer-grade robotics, drones, and even augmented reality (AR) applications, where devices need to understand the space around them in real-time without expensive hardware.<br/><br/>
+
+Visual-SLAM is widely used today in robotics and drones, but its applications are expanding. For example, augmented reality devices like Microsoft’s HoloLens and even mobile apps that offer AR functionality use similar techniques to place virtual objects within a physical environment. In these cases, Visual-SLAM helps the device understand where walls, floors, and other surfaces are, so virtual objects can interact with the real world in a convincing way.<br/><br/>
+
+P.S. This is my first blog, please pardon any oversights or mistakes. I'll try to make my writing better and beginner friendly with my upcoming blogs, also I will be delving deeper in the working of SLAM in upcoming work.
+        
+        </p>
+    </article>
+
+    <footer>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+</body>
+</html>

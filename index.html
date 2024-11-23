@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Profile website of Jai Tyagi">
     <title>yo!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Applying SF Mono font */
         @font-face {
@@ -18,12 +22,22 @@
             font-family: 'SF Mono', monospace;
             margin: 0;
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
+        body.light-theme {
+            background-color: #f1f1f1;
+            color: #121212;
+        }
 
         a {
             color: #05f140;
             text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        body.light-theme a {
+            color: #0056b3;
         }
 
         a:hover {
@@ -44,9 +58,30 @@
             font-size: 18px;
         }
 
-        footer {
-            margin-top: 50px;
-            font-size: 14px;
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: #05f14020;
+        }
+
+        .light-theme .theme-toggle {
+            border-color: #000000;
+            color: #000000;
         }
 
         .section {
@@ -55,6 +90,10 @@
     </style>
 </head>
 <body>
+    <button id="theme-toggle" class="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </button>
+    <!-- Rest of your existing body content -->
     <header>
         <h1>Hi, my name is Jai</h1>
         <p>I work on computer vision and stuff.</p>
@@ -79,6 +118,7 @@
         <ul>
             <li><a href="visual_slam.html">Visual-SLAM: How does it work?</a></li>
             <li><a href="understanding_geometry.html">Understanding 3-D Geometry for Robotics</a></li>
+            <!--<li><a href="gaussian_splatting.html">Gaussian Splatting: 3-D stuff from 2-D images</a></li> coming soon sneaky friend :)-->
             <!-- <li><a href="blog3.html">Blog Title 3</a></li> -->
         </ul>
     </section>
@@ -88,5 +128,20 @@
     <footer>
         <p>© 2024 Jai Tyagi | <a href="mailto:jaityagi132@gmail.com">Contact Me</a></p>
     </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            if (document.body.classList.contains('light-theme')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+    </script>
 </body>
 </html>

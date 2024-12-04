@@ -34,6 +34,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
         nav {
@@ -56,11 +58,9 @@
         }
 
         .header-content {
-            min-height: 40vh; /* Reduced from 60vh */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            animation: fadeIn 1s ease;
+            min-height: auto;
+            padding: 80px 0;
+            position: relative;
             margin-bottom: 40px; /* Added specific margin */
         }
 
@@ -106,9 +106,32 @@
             transition: all 0.3s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Add decorative background pattern */
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--bg-dark) 21px, transparent 1%) center,
+                linear-gradient(var(--bg-dark) 21px, transparent 1%) center,
+                rgba(255, 255, 255, 0.03);
+            background-size: 24px 24px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Style sections with divider line */
+        .section {
+            position: relative;
+            padding: 40px 0;
+            margin-bottom: 40px; /* Added consistent section spacing */
+        }
+
+        .section:before {
+            display: none;
         }
 
         /* Light theme overrides */
@@ -128,6 +151,14 @@
         body.light-theme .theme-toggle {
             background: rgba(0, 0, 0, 0.1);
             color: var(--text-light);
+        }
+
+        body.light-theme .background-pattern {
+            background: 
+                linear-gradient(90deg, var(--bg-light) 21px, transparent 1%) center,
+                linear-gradient(var(--bg-light) 21px, transparent 1%) center,
+                rgba(0, 0, 0, 0.03);
+            background-size: 24px 24px;
         }
 
         .blogs-list {
@@ -153,12 +184,35 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .section {
-            margin-bottom: 40px; /* Added consistent section spacing */
+        @keyframes fadeIn {
+            /* Remove this if not used elsewhere */
+        }
+
+        .header-subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 15px 0;
+        }
+
+        .header-tags {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .tag {
+            background: rgba(5, 241, 64, 0.1);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: var(--primary-color);
         }
     </style>
 </head>
 <body>
+    <!-- Add background pattern div -->
+    <div class="background-pattern"></div>
     <div class="container">
         <nav>
             <div class="nav-links">
@@ -173,43 +227,51 @@
         </button>
 
         <header class="header-content">
-            <h1>Hi, my name is Jai</h1>
-            <p>I work on computer vision and stuff.</p>
+            <h1>hi, my name is Jai</h1>
+            <p class="header-subtitle">turning caffeine into code since 2020</p>
+            <div class="header-tags">
+                <span class="tag">computer vision</span>
+                <span class="tag">SLAM</span>
+                <span class="tag">robotics</span>
+                <span class="tag">deep learning</span>
+                <span class="tag">coffee enthusiast</span>
+            </div>
+            <p>building stuff that helps machines understand the world like we do.</p>
         </header>
 
         <section id="about" class="section">
-            <h2>About Me</h2>
-            <p>Hello, I am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. I also try to read papers in my free time. I have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. Along wth some friends, I started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. At underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume. </a></p>
+            <h2>about me</h2>
+            <p>hello, i am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. i also try to read papers in my free time. i have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. along wth some friends, i started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. at underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume. </a></p>
         </section>
 
         <section id="projects" class="section">
-            <h2>Projects</h2>
+            <h2>projects</h2>
             <div class="projects-grid">
                 <div class="project-card">
                     <h3>Digital Heritage</h3>
-                    <p>A Visual-SLAM based approach to mapping archaeological sites & navigation.</p>
+                    <p>a Visual-SLAM based approach to mapping archaeological sites & navigation.</p>
                     <a href="https://github.com/Jai132/NVIDIA_Jetson_Inference">Learn More →</a>
                 </div>
                 <div class="project-card">
-                    <h3>Dump-It</h3>
-                    <p>Smart bin that segregates waste into 5 categories using AI.</p>
+                    <h3>Dump-It</h3></h3>
+                    <p>smart bin that segregates waste into 5 categories using AI.</p>
                     <a href="https://github.com/orgs/DumpIt-Right/repositories">Learn More →</a>
                 </div>
                 <div class="project-card">
                     <h3>HomeSphere</h3>
-                    <p>Home automation project for intelligent living spaces.</p>
+                    <p>home automation project for intelligent living spaces.</p>
                     <a href="https://github.com/Jai132/Home-automation">Learn More →</a>
                 </div>
                 <div class="project-card">
                     <h3>Symphony</h3>
-                    <p>An arcade-style rhythm game inspired by Dance Dance Revolution.</p>
+                    <p>an arcade-style rhythm game inspired by Dance Dance Revolution.</p>
                     <a href="https://github.com/Jai132/Symphonyv0.1">Learn More →</a>
                 </div>
             </div>
         </section>
 
         <section id="blogs" class="section">
-            <h2>Blogs</h2>
+            <h2>blogs</h2>
             <ul class="blogs-list">
                 <li><a href="visual_slam.html">Visual-SLAM: How does it work?</a></li>
                 <li><a href="understanding_geometry.html">Understanding 3-D Geometry for Robotics</a></li>
@@ -220,7 +282,7 @@
         <hr>
 
         <footer>
-            <p>© 2024 Jai Tyagi | <a href="mailto:jaityagi132@gmail.com">Contact Me</a></p>
+            <p>© 2024 Jai Tyagi </p>
             <div class="social-links">
                 <a href="https://github.com/Jai132" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="www.linkedin.com/in/jai-tyagi-op" target="_blank"><i class="fab fa-linkedin"></i></a>

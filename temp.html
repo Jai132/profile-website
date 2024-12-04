@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Understanding 3-D Geometry for Robotics</title>
+    <meta name="description" content="Profile website of Jai Tyagi">
+    <title>yo!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @font-face {
@@ -11,149 +12,208 @@
             src: url('https://fonts.cdnfonts.com/s/18047/SFMono-Regular.woff') format('woff');
         }
 
+        :root {
+            --primary-color: #05f140;
+            --bg-dark: #121212;
+            --text-dark: #f1f1f1ea;
+            --bg-light: #f1f1f1;
+            --text-light: #121212;
+        }
+
         body {
-            background-color: #121212;
-            color: #f1f1f1ea;
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
             font-family: 'SF Mono', monospace;
             margin: 0;
-            padding: 20px;
-            transition: background-color 0.3s, color 0.3s;
+            padding: 0;
+            line-height: 1.6;
+            transition: all 0.3s ease;
         }
 
-        body.light-theme {
-            background-color: #f1f1f1;
-            color: #121212;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        a {
-            color: #05f140;
+        nav {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
-        body.light-theme a {
-            color: #0056b3;
+        .header-content {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            font-size: 24px;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
         }
 
         .theme-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: none;
-            border: 2px solid #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            color: var(--text-dark);
             transition: all 0.3s;
         }
 
-        .theme-toggle:hover {
-            background-color: #05f14020;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .light-theme .theme-toggle {
-            border-color: #000000;
-            color: #000000;
+        /* Light theme overrides */
+        body.light-theme {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        body.light-theme .nav-links a,
+        body.light-theme .social-links a {
+            color: var(--text-light);
+        }
+
+        body.light-theme .project-card {
+            background: rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
 <body>
-    <button id="theme-toggle" class="theme-toggle">
-        <i class="fas fa-sun"></i>
-    </button>
+    <div class="container">
+        <nav>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="#blogs">Blogs</a>
+            </div>
+        </nav>
 
-    <header>
-        <h1>Understanding 3-D Geometry for Robotics</h1>
-        <p>Posted on 10 October, 2024</p>
-    </header>
-    <hr>
-    <article>
-        <p>
+        <button id="theme-toggle" class="theme-toggle">
+            <i class="fas fa-sun"></i>
+        </button>
 
+        <header class="header-content">
+            <h1>Hi, my name is Jai</h1>
+            <p>I work on computer vision and stuff.</p>
+            <div class="social-links">
+                <a href="https://github.com/Jai132" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/your-profile" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:jaityagi132@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+        </header>
 
-            In robotics, especially in systems using Simultaneous Localization and Mapping (SLAM), a robot’s ability to navigate and understand its environment relies on an understanding of spatial 3D geometry, an example of which we saw in the <a href="visual_slam.html">previous blog</a> where we discussed Visual-SLAM. At its core, SLAM allows a robot to map its surroundings while keeping track of its own position within that map. This is a crucial capability for autonomous systems like self-driving cars, drones, and even household robots. The robot has to understand how to move through space, recognize objects, and keep track of how its position and orientation change over time. To do this, the robot needs to use several important concepts from geometry, including Euclidean space, affine transformations, similarity transformations, perspective transformations, and methods for handling rotations using rotation matrices and quaternions. These geometric tools form the backbone of SLAM, allowing robots to build accurate maps and position themselves within those maps.<br><br>
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <p>Hello, I am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. I also try to read papers in my free time. I have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. Along wth some friends, I started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. At underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume. </a></p>
+        </section>
 
-First, it’s important to establish the basic framework that robots use to understand space. This framework is called Euclidean space. Euclidean space is the familiar 3D environment where we live, and it is defined by three coordinates: x, y, and z. In Euclidean space, distances between points and angles between lines remain constant regardless of where you are or how you move. For instance, the distance between two walls in a room will remain the same whether you’re looking at it from one angle or another. This consistency is critical for SLAM because robots rely on these fixed relationships to build accurate maps. When a robot measures distances or angles between objects in a room, those measurements must remain reliable as the robot moves around. If the measurements changed unexpectedly, the map would be incorrect, and the robot could lose its position or fail to understand its environment. Thus, Euclidean space provides the stable foundation that SLAM needs to function.<br><br>
+        <section id="projects" class="section">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Digital Heritage</h3>
+                    <p>A Visual-SLAM based approach to mapping archaeological sites & navigation.</p>
+                    <a href="https://github.com/Jai132/NVIDIA_Jetson_Inference">Learn More →</a>
+                </div>
+                <div class="project-card">
+                    <h3>Dump-It</h3>
+                    <p>Smart bin that segregates waste into 5 categories using AI.</p>
+                    <a href="https://github.com/orgs/DumpIt-Right/repositories">Learn More →</a>
+                </div>
+                <div class="project-card">
+                    <h3>HomeSphere</h3>
+                    <p>Home automation project for intelligent living spaces.</p>
+                    <a href="https://github.com/Jai132/Home-automation">Learn More →</a>
+                </div>
+                <div class="project-card">
+                    <h3>Symphony</h3>
+                    <p>An arcade-style rhythm game inspired by Dance Dance Revolution.</p>
+                    <a href="https://github.com/Jai132/Symphonyv0.1">Learn More →</a>
+                </div>
+            </div>
+        </section>
 
-However, working in Euclidean space alone is not enough for robots to understand and manipulate their environment. Robots also need to perform various transformations to adjust how they view and interact with objects. These transformations allow the robot to rotate, translate, scale, or distort objects as needed, depending on the robot’s movements or changes in perspective. One of the most important types of transformations is the affine transformation. Affine transformations extend beyond simple rotation and translation by allowing for scaling and shearing. For instance, scaling might occur when a robot adjusts the size of an object in its map, while shearing can happen when objects appear slanted or skewed. Affine transformations are useful because they give the robot more flexibility in representing real-world environments, which are often irregular and complex. Imagine a robot exploring a warehouse where some walls are perfectly vertical, while others may be slightly tilted. By using affine transformations, the robot can accurately map both types of walls and adjust its internal model to account for these variations.<br><br>
+        <section id="blogs" class="section">
+            <h2>Blogs</h2>
+            <ul>
+                <li><a href="visual_slam.html">Visual-SLAM: How does it work?</a></li>
+                <li><a href="understanding_geometry.html">Understanding 3-D Geometry for Robotics</a></li>
+                <!--<li><a href="gaussian_splatting.html">Gaussian Splatting: 3-D stuff from 2-D images</a></li> coming soon sneaky friend :)-->
+                <!-- <li><a href="blog3.html">Blog Title 3</a></li> -->
+            </ul>
+        </section>
 
-<img src="assets/10_october_2024/affine transform.png" data-light-src="assets/10_october_2024/affine_transform_dark.png"
-data-dark-src="assets/10_october_2024/affine transform.png" alt="Affine Transform" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%; height: auto;">
-<br>
+        <hr>
 
-Another useful transformation in SLAM is the similarity transformation. This type of transformation is particularly helpful when the robot needs to deal with both scaling and rotation at the same time. Similarity transformations allow for objects to be scaled while maintaining their relative shapes and orientations. For example, consider a robot moving from a large open space, such as a factory floor, into a smaller room. The robot needs to scale down its understanding of the space while still recognizing the relative positions of walls, doors, and other objects. This transformation ensures that the robot’s map remains accurate even when the size of the environment changes. Similarity transformations are especially useful for robots that explore large, multi-level environments, such as drones flying through warehouses or autonomous vehicles navigating through city streets.<br><br>
-
-<img src="assets/10_october_2024/similarity transform.png" data-light-src="assets/10_october_2024/similarity_transform_dark.png"
-data-dark-src="assets/10_october_2024/similarity transform.png" alt="Similarity Transform" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%; height: auto;">
-<br>
-
-When robots use cameras to gather visual data about their surroundings, they also need to apply perspective transformations. Cameras capture images in 2D, but robots operate in a 3D world. Perspective transformations help convert the 2D images that a camera sees into useful 3D information. For example, objects that are far away from the camera appear smaller, while objects that are closer appear larger. Without correcting for this perspective, a robot would struggle to understand how far away objects really are or how they are positioned relative to each other. Perspective transformations adjust the size and position of objects in the robot’s view to reflect their actual 3D locations. This is crucial for SLAM because it allows robots to interpret the visual data they gather and build accurate maps of their surroundings based on that data.<br><br>
-
-<img src="assets/10_october_2024/projective transform.png" data-light-src="assets/10_october_2024/projective_transform_dark.png"
-data-dark-src="assets/10_october_2024/projective transform.png" alt="Projective Transform" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%; height: auto;">
-<br>
-
-In addition to these transformations, robots also need to account for rotations as they move through space. One common way to represent rotations is through rotation matrices. A rotation matrix is a 3x3 matrix that can be used to rotate points in 3D space. For example, if a robot needs to turn to face a different direction, the rotation matrix will adjust the coordinates of points in the robot’s environment to reflect its new orientation. Rotation matrices are straightforward and easy to use, which makes them a popular choice in many robotics applications. However, rotation matrices can suffer from numerical errors over time. If a robot performs many consecutive rotations, small rounding errors can accumulate, causing the rotation matrix to lose its accuracy. This can lead to problems with the robot’s orientation or movement.<br><br>
-
-To address this issue, many robotic systems use quaternions to represent rotations. Quaternions are a set of four numbers—one real number and three imaginary numbers—that provide a compact and efficient way to handle rotations in 3D space. Unlike Euler angles, which can cause problems like <a href="https://youtu.be/zjMuIxRvygQ?t=131">gimbal lock</a> (where the robot loses one of its rotational degrees of freedom), quaternions avoid these issues and allow for smooth, continuous rotations in any direction. Quaternions are particularly useful in systems where the robot needs to rotate frequently and in multiple directions, such as drones or robotic arms. Because they are less prone to numerical errors and can handle complex rotations without problems, quaternions are often preferred in SLAM systems that require high precision over long periods of time.<br><br>
-
-While these core concepts form the backbone of SLAM, there are additional tools and ideas that help make SLAM systems even more effective. One such concept is homogeneous coordinates, which add an extra dimension to standard Euclidean coordinates. Instead of representing a point in 3D space as (x, y, z), homogeneous coordinates use four coordinates: (x, y, z, w). This additional dimension simplifies the process of performing transformations, allowing for more efficient calculations when applying affine, similarity, or perspective transformations. Homogeneous coordinates are especially helpful when working with complex transformations, as they allow all transformations to be represented uniformly, which reduces the computational complexity involved. We will discuss the mathematics of these coordinates in the upcoming blogs in detail which will give a more intuitive understanding of what the transfarmations are actually doing.<br><br>
-
-That's it for this blog, thanks for reading and have a great day ahead!!
-              
-        </p>
-    </article>
-
-    <footer>
-        <p><a href="index.html">Back to Home</a></p>
-    </footer>
-    <!-- Rest of your blog content -->
-
-
-
+        <footer>
+            <p>© 2024 Jai Tyagi |</p>
+        </footer>
+    </div>
     <script>
         const themeToggle = document.getElementById('theme-toggle');
         const icon = themeToggle.querySelector('i');
-        const images = document.querySelectorAll('img');
-
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-theme');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-            updateImages('light');
-        }
-
-        function updateImages(theme) {
-            images.forEach(img => {
-                const newSrc = theme === 'light' ? 
-                    img.dataset.lightSrc : 
-                    img.dataset.darkSrc;
-                if (newSrc) {
-                    img.src = newSrc;
-                }
-            });
-        }
 
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('light-theme');
-            const isLight = document.body.classList.contains('light-theme');
-            
-            if (isLight) {
+            if (document.body.classList.contains('light-theme')) {
                 icon.classList.remove('fa-sun');
                 icon.classList.add('fa-moon');
-                updateImages('light');
-                localStorage.setItem('theme', 'light');
             } else {
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
-                updateImages('dark');
-                localStorage.setItem('theme', 'dark');
             }
         });
     </script>

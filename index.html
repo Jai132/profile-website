@@ -28,6 +28,7 @@
             padding: 0;
             line-height: 1.6;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .container {
@@ -43,7 +44,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px; /* Reduced from default */
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
         }
 
         .nav-links {
@@ -54,48 +57,81 @@
         a {
             color: var(--primary-color);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        a:hover {
+            color: var(--primary-color);
+            opacity: 0.8;
+            transform: translateY(-1px);
         }
 
         .header-content {
             min-height: auto;
-            padding: 80px 0;
+            padding: 100px 0;
             position: relative;
-            margin-bottom: 40px; /* Added specific margin */
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header-content h1 {
+            margin-bottom: 15px;
+            font-size: 2.5em;
         }
 
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 25px;
             margin: 40px 0;
         }
 
         .project-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            transition: transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--primary-color);
+        }
+
+        .project-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
         }
 
         .social-links {
             display: flex;
-            gap: 15px;
-            margin-top: 0;  /* Changed from 20px */
+            gap: 20px;
+            margin-top: 0;
+        }
+
+        .social-links a {
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+        }
+
+        .social-links a:hover {
+            opacity: 1;
+            transform: translateY(-3px);
         }
 
         .theme-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px); /* For Safari support */
-            border: none;
+            background: rgba(5, 241, 64, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(5, 241, 64, 0.1);
             border-radius: 50%;
             width: 45px;
             height: 45px;
@@ -104,69 +140,135 @@
             align-items: center;
             justify-content: center;
             color: var(--text-dark);
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 100;
         }
 
         .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            transform: rotate(90deg) scale(1.1);
+            background: rgba(5, 241, 64, 0.15);
         }
 
-        body.light-theme .theme-toggle {
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        body.light-theme .theme-toggle:hover {
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        /* Add decorative background pattern */
         .background-pattern {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: 100%;
-            background: 
-                linear-gradient(90deg, var(--bg-dark) 21px, transparent 1%) center,
-                linear-gradient(var(--bg-dark) 21px, transparent 1%) center,
-                rgba(255, 255, 255, 0.03);
-            background-size: 24px 24px;
+            background: radial-gradient(circle at 50% 50%,
+                rgba(5, 241, 64, 0.05) 0%,
+                transparent 50%),
+                radial-gradient(circle at 80% 20%,
+                rgba(5, 241, 64, 0.03) 0%,
+                transparent 40%);
+            animation: gradientMove 20s ease infinite;
             opacity: 0.4;
             pointer-events: none;
             z-index: 0;
         }
 
-        /* Style sections with divider line */
+        @keyframes gradientMove {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
         .section {
             position: relative;
             padding: 40px 0;
-            margin-bottom: 40px; /* Added consistent section spacing */
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: sectionFadeIn 0.8s ease-out forwards;
         }
 
-        .section:before {
-            display: none;
+        @keyframes sectionFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Light theme overrides */
+        .header-subtitle {
+            font-size: 1.2em;
+            color: var(--text-dark);
+            opacity: 0.7;
+            margin: 15px 0;
+        }
+
+        .header-tags {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .tag {
+            background: rgba(5, 241, 64, 0.08);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            color: var(--primary-color);
+            border: 1px solid rgba(5, 241, 64, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .tag:hover {
+            background: rgba(5, 241, 64, 0.12);
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .blogs-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .blogs-list li {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .blogs-list li:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .blogs-list li a:before {
+            content: ">";
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+        }
+
+        /* Light theme styles */
         body.light-theme {
             background-color: var(--bg-light);
             color: var(--text-light);
         }
 
         body.light-theme a {
-            color: #1a5f7a;  /* Beautiful dark marine blue for light theme */
+            color: #1a5f7a;
         }
 
         body.light-theme .project-card {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .project-card h3 {
+            color: #1a5f7a;
         }
 
         body.light-theme .theme-toggle {
@@ -187,67 +289,126 @@
             opacity: 0.7;
         }
 
-        body.light-theme .blogs-list li a:before,
-        body.light-theme .tag {
-            color: #1a5f7a;  /* Match the new link color */
+        body.light-theme .blogs-list li:hover {
+            background: rgba(0, 0, 0, 0.03);
         }
 
         body.light-theme .tag {
-            background: rgba(26, 95, 122, 0.1);  /* Subtle background using the marine blue */
+            background: rgba(26, 95, 122, 0.1);
+            color: #1a5f7a;
+            border-color: rgba(26, 95, 122, 0.2);
         }
 
-        .blogs-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .blogs-list li {
-            margin-bottom: 10px;
-        }
-
-        .blogs-list li a:before {
-            content: ">";
-            margin-right: 10px;
-            color: var(--primary-color);
-        }
-
-        footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        body.light-theme .blogs-list li a:before {
+            color: #1a5f7a;
         }
 
         @keyframes fadeIn {
-            /* Remove this if not used elsewhere */
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .header-subtitle {
-            font-size: 1.1em;
-            color: var(--text-dark);
-            opacity: 0.7;
-            margin: 15px 0;
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
         }
 
-        .header-tags {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 20px 0;
+        /* Enhanced header animation */
+        .header-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--primary-color), #00ff9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease-out;
         }
 
-        .tag {
-            background: rgba(5, 241, 64, 0.1);
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            color: var(--primary-color);
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Smooth link hover effect */
+        .nav-links a {
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Header gradient text for light theme */
+        body.light-theme .header-content h1 {
+            background: linear-gradient(45deg, #1a5f7a, #2c3e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Section animations for dark theme */
+        .section {
+            position: relative;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: sectionFadeIn 0.8s ease-out forwards;
+        }
+
+        /* Nav link underline effect - dark theme */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        /* Light theme overrides */
+        body.light-theme .nav-links a::after {
+            background-color: #1a5f7a;  /* Match the light theme color */
+        }
+
+        body.light-theme .blogs-list li a:before {
+            color: #1a5f7a;
+        }
+
+        body.light-theme a {
+            color: #1a5f7a;
+        }
+
+        body.light-theme a:hover {
+            color: #1a5f7a;
         }
     </style>
 </head>
 <body>
-    <!-- Add background pattern div -->
     <div class="background-pattern"></div>
     <div class="container">
         <nav>
@@ -277,7 +438,7 @@
 
         <section id="about" class="section">
             <h2>about me</h2>
-            <p>hello, i am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. i also try to read papers in my free time. i have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. along wth some friends, i started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. at underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume. </a></p>
+            <p>hello, i am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. i also try to read papers in my free time. i have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. along wth some friends, i started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. at underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume.</a></p>
         </section>
 
         <section id="projects" class="section">
@@ -289,7 +450,7 @@
                     <a href="https://github.com/Jai132/NVIDIA_Jetson_Inference">Learn More →</a>
                 </div>
                 <div class="project-card">
-                    <h3>Dump-It</h3></h3>
+                    <h3>Dump-It</h3>
                     <p>smart bin that segregates waste into 5 categories using AI.</p>
                     <a href="https://github.com/orgs/DumpIt-Right/repositories">Learn More →</a>
                 </div>
@@ -318,7 +479,7 @@
         <hr>
 
         <footer>
-            <p>© 2024 Jai Tyagi </p>
+            <p>© 2025 Jai Tyagi </p>
             <div class="social-links">
                 <a href="https://github.com/Jai132" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="www.linkedin.com/in/jai-tyagi-op" target="_blank"><i class="fab fa-linkedin"></i></a>

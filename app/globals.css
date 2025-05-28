@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    color: #ffffff;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .bg-space {
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    position: relative;
+  }
+
+  .stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+  }
+
+  .star.large {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  }
+
+  .star.medium {
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+  }
+
+  .star.small {
+    width: 1px;
+    height: 1px;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+  }
+
+  .cosmic-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(148, 163, 184, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .cosmic-button {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    color: #e2e8f0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .cosmic-button:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(147, 51, 234, 0.3) 100%);
+    border-color: rgba(148, 163, 184, 0.6);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .nebula-bg {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.1;
+    z-index: 0;
+  }
+
+  .nebula-purple {
+    background: radial-gradient(circle, rgba(147, 51, 234, 0.4) 0%, transparent 70%);
+  }
+
+  .nebula-blue {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+  }
+
+  .constellation-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.3), transparent);
+    z-index: 1;
+  }
+
+  .shooting-star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    animation: shoot 3s linear infinite;
+  }
+
+  .elegant-heading {
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .elegant-text {
+    font-family: var(--font-body);
+    line-height: 1.7;
+  }
+
+  .social-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .social-icon-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .drop-shadow-glow {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes shoot {
+  0% {
+    transform: translateX(-100px) translateY(100px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) translateY(-100px);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

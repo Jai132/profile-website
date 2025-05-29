@@ -5,62 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Parameters of Gaussian Splatting</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'SF Mono';
-            src: url('https://fonts.cdnfonts.com/s/18047/SFMono-Regular.woff') format('woff');
-        }
-
         :root {
             --primary-color: #05f140;
-            --bg-dark: #121212;
+            --bg-dark: #030712;
             --text-dark: #f1f1f1ea;
-            --bg-light: #f1f1f1;
-            --text-light: #121212;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-dark);
-            font-family: 'SF Mono', monospace;
+            font-family: 'Crimson Text', serif;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.8;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(45deg, #010409, #0a0f1e, #0d1117);
+            opacity: 1;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            border-radius: 50%;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .star.white {
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .star.blue {
+            background: radial-gradient(circle at center, rgba(147, 197, 253, 0.9) 0%, transparent 100%);
+            box-shadow: 0 0 3px rgba(147, 197, 253, 0.5);
+            width: 1.5px;
+            height: 1.5px;
+        }
+
+        @keyframes twinkle {
+            0%, 50%, 100% { 
+                opacity: 1;
+                background-position: 0 0;
+            }
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        nav {
-            padding: 20px 0;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .theme-toggle {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dark);
-            transition: all 0.3s;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
         }
 
         article {
             text-align: justify;
             margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.8;
         }
 
         img {
@@ -72,14 +93,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .post-meta {
-            color: #888;
+            color: #93c5fd;
             margin-bottom: 30px;
+            font-family: 'Crimson Text', serif;
+            font-style: italic;
+            font-size: 1.1em;
         }
 
         a {
@@ -88,45 +119,77 @@
             transition: color 0.3s ease;
         }
 
+        a:hover {
+            text-decoration: underline;
+            color: #00ff9d;
+        }
+
         footer {
-            margin-top: 40px;
+            margin-top: 60px;
             padding: 20px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'Crimson Text', serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Light theme overrides */
-        body.light-theme {
-            background-color: var(--bg-light);
-            color: var(--text-light);
+        .back-link {
+            color: #93c5fd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
         }
 
-        body.light-theme .theme-toggle {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-light);
+        .back-link:hover {
+            color: #60a5fa;
+            transform: translateX(-5px);
         }
 
-        body.light-theme footer {
-            border-top-color: rgba(0, 0, 0, 0.1);
+        .copyright {
+            opacity: 0.8;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backgroundPattern = document.querySelector('.background-pattern');
+            const numWhiteStars = 110;
+            const numBlueStars = 40;
+
+            function createStar(isBlue = false) {
+                const star = document.createElement('div');
+                star.className = `star ${isBlue ? 'blue' : 'white'}`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                return star;
+            }
+
+            // Create white stars
+            for (let i = 0; i < numWhiteStars; i++) {
+                backgroundPattern.appendChild(createStar());
+            }
+
+            // Create blue stars
+            for (let i = 0; i < numBlueStars; i++) {
+                backgroundPattern.appendChild(createStar(true));
+            }
+        });
+    </script>
 </head>
 <body>
+    <div class="background-pattern"></div>
     <div class="container">
-        <nav>
-            <a href="index.html">← Back to Home</a>
-            <button id="theme-toggle" class="theme-toggle">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-
-        <header>
+        <div class="blog-header">
             <h1>Basic Parameters of Gaussian Splatting</h1>
-            <div class="post-meta">Posted on 1 March, 2025</div>
-        </header>
+            <div class="post-meta">Posted on March 1, 2025</div>
+        </div>
 
         <article>
             <p>
-                Imagine you’re at a friend's birthday. Now consider any moment of the party as a scene in a 3D space where every element has its own story. You can visualize this because for you this inofrmation is intuitive, you live in a 3-D space. But for a computer, such is not the case, it cannot process or understand a 3-D scene without certain programmed mathematical functions. Enter Gaussian Splatting. Gaussian splatting is one of those clever techniques that turns mathematical descriptions into visual information. Instead of just placing plain dots or pixels, we use little “blobs” or "Gaussians" defined by a handful of parameters to build up a scene. Each of these blobs comes with its own position, shape, color, and even a measure of transparency.
+                Imagine you're at a friend's birthday. Now consider any moment of the party as a scene in a 3D space where every element has its own story. You can visualize this because for you this inofrmation is intuitive, you live in a 3-D space. But for a computer, such is not the case, it cannot process or understand a 3-D scene without certain programmed mathematical functions. Enter Gaussian Splatting. Gaussian splatting is one of those clever techniques that turns mathematical descriptions into visual information. Instead of just placing plain dots or pixels, we use little "blobs" or "Gaussians" defined by a handful of parameters to build up a scene. Each of these blobs comes with its own position, shape, color, and even a measure of transparency.
                 
                 <img src="assets/26_february_2025/example.png" data-light-src="assets/26_february_2025/example.png"
                 data-dark-src="assets/26_february_2025/example.png" alt="Example" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%; height: auto;">
@@ -135,19 +198,19 @@
                 Areas of exploration such a these are an overlapping area for fields of Computer Vision(understandng data from a scene) & Graphics(recreating a scene based on understanding from available information and data). From this blog onwards, we will explore Gaussian Splatting in detail in a series of blogs. With today's blog being focussed on giving a basic understanding of the parameters and how they affect the results.<br><br>
    
 
-Let’s start with position. Think of it as the address of each splat in our 3D world, defined by the familiar X, Y, and Z coordinates. Just like you’d pinpoint a location on a map using latitude, longitude, and elevation, each splat’s position ensures it appears in the right spot relative to everything else. When you’re building a virtual sculpture, getting the position right is the first step to ensuring everything fits together.<br>
+Let's start with position. Think of it as the address of each splat in our 3D world, defined by the familiar X, Y, and Z coordinates. Just like you'd pinpoint a location on a map using latitude, longitude, and elevation, each splat's position ensures it appears in the right spot relative to everything else. When you're building a virtual sculpture, getting the position right is the first step to ensuring everything fits together.<br>
 
-These positions are often represented in a coordinate system that may undergo various transformations. In many graphics pipelines, we use homogeneous coordinates—by appending an extra dimension—to seamlessly incorporate translations along with rotations and scaling through matrix multiplication. Such conversions are critical when you’re rendering a scene where camera angles and object placements need to be dynamically adjusted. <br>
+These positions are often represented in a coordinate system that may undergo various transformations. In many graphics pipelines, we use homogeneous coordinates—by appending an extra dimension—to seamlessly incorporate translations along with rotations and scaling through matrix multiplication. Such conversions are critical when you're rendering a scene where camera angles and object placements need to be dynamically adjusted. <br>
 
 When the splats are projected onto a 2D screen, the underlying algorithms must account for perspective distortions, meaning that objects further away appear smaller. This perspective projection involves dividing the X and Y coordinates by the Z coordinate (or a function of it), ensuring that the scene looks natural to our eyes. In practice, setting up and transforming positions correctly can be the difference between a lifelike scene and one that feels off-kilter.<br><br>
 
-Now, consider the shape of these blobs, controlled by a covariance matrix, a 3x3 grid of numbers that tells us how the splat is stretched, rotated, or scaled in 3D space. Imagine you have a lump of clay; if you squeeze it, it might become elongated in one direction, forming an ellipse rather than a perfect circle[2]. That’s essentially what the covariance does: it defines the splat’s “footprint.” If the matrix values are all equal, you end up with a nice, round blob. If they differ, the splat takes on a more interesting, stretched shape. Different scenes have a different number and type giving your scene a richer, more dynamic look.<br><br>
+Now, consider the shape of these blobs, controlled by a covariance matrix, a 3x3 grid of numbers that tells us how the splat is stretched, rotated, or scaled in 3D space. Imagine you have a lump of clay; if you squeeze it, it might become elongated in one direction, forming an ellipse rather than a perfect circle[2]. That's essentially what the covariance does: it defines the splat's "footprint." If the matrix values are all equal, you end up with a nice, round blob. If they differ, the splat takes on a more interesting, stretched shape. Different scenes have a different number and type giving your scene a richer, more dynamic look.<br><br>
 
-Furthermore, it helps in computing how the splat contributes to the pixel intensity on the screen by effectively “weighing” distances from the splat center according to its shape. This is essential in evaluating the Gaussian function for each pixel, ensuring that the fall-off in brightness or density is computed correctly, thereby influencing the final visual output with subtle variations in shape and size[3].<br><br>
+Furthermore, it helps in computing how the splat contributes to the pixel intensity on the screen by effectively "weighing" distances from the splat center according to its shape. This is essential in evaluating the Gaussian function for each pixel, ensuring that the fall-off in brightness or density is computed correctly, thereby influencing the final visual output with subtle variations in shape and size[3].<br><br>
 
 We wil further study more about these covariance matrices and their working in the upcoming blogs <br><br>
 
-Next, we have color. In our digital world, color is everything, and each splat comes with its own RGB values that determine its hue. Picture mixing paints on an artist’s palette: a dash of red here, a hint of blue there, and suddenly a unique color is born. In Gaussian splatting, these RGB values allow each blob to contribute to the overall color composition of the scene. Think about a sunset, where subtle variations in color blend to create a beautiful gradient across the sky—each splat is like a tiny brushstroke contributing to that larger picture.<br><br>
+Next, we have color. In our digital world, color is everything, and each splat comes with its own RGB values that determine its hue. Picture mixing paints on an artist's palette: a dash of red here, a hint of blue there, and suddenly a unique color is born. In Gaussian splatting, these RGB values allow each blob to contribute to the overall color composition of the scene. Think about a sunset, where subtle variations in color blend to create a beautiful gradient across the sky—each splat is like a tiny brushstroke contributing to that larger picture.<br><br>
 
 Technically, these RGB values are typically normalized (often in the 0 to 1 range) or specified in the 0 to 255 range, depending on the system. When multiple splats overlap, their colors blend according to specific algorithms, sometimes using weighted averages based on their alpha values. This blending is crucial for achieving a smooth, continuous appearance rather than a patchwork like appearance of colors.<br><br>
 
@@ -159,7 +222,7 @@ Moreover, in more advanced implementations, these RGB values can be enhanced wit
 
 Transparency, or alpha, is the final parameter that ties everything together. Imagine working with watercolor paints, where the artist decides how much water to mix with paint, affecting how see-through each wash of color is. The alpha value does just that for our splats. A higher alpha makes a splat appear more solid and opaque, while a lower alpha gives it a softer, more see-through kinda quality. This control over transparency means that when splats overlap, they blend in ways that can simulate soft shadows, glowing light, or delicate textures.<br><br>
 
-Additionally, managing transparency in a scene with many overlapping elements can be quite challenging. Techniques such as order-independent transparency (OIT) have been developed to address issues that arise when the compositing order isn’t easily determined. Such methods ensure that even in complex scenes, the interplay between opaque and semi-transparent splats is calculated correctly, maintaining the visual info of the final image. This careful handling of alpha values ultimately contributes to a more polished and realistic rendering.<br><br>
+Additionally, managing transparency in a scene with many overlapping elements can be quite challenging. Techniques such as order-independent transparency (OIT) have been developed to address issues that arise when the compositing order isn't easily determined. Such methods ensure that even in complex scenes, the interplay between opaque and semi-transparent splats is calculated correctly, maintaining the visual info of the final image. This careful handling of alpha values ultimately contributes to a more polished and realistic rendering.<br><br>
 
 
 <img src="assets/26_february_2025/alpha-blending.png" data-light-src="assets/26_february_2025/alpha-blending.png"
@@ -168,7 +231,7 @@ Additionally, managing transparency in a scene with many overlapping elements ca
 
 
 
-When these parameters—position, covariance, color, and alpha—work together, they allow for the creation of images that feel natural and fluid. Each splat is not just a dot; it’s a miniaturized, adjustable element of a larger visual narrative. Now that we have covered the basic parameters we will now be understanding how Gaussian splatting actaully works, we'll also be looking at some very interesting frameworks that are used when we work with these technlogies. This was the first blog in a series of blogs that will be focussed on Gaussian Splatting. Stay tuned for more such interesting blogs.<br><br><br><br>
+When these parameters—position, covariance, color, and alpha—work together, they allow for the creation of images that feel natural and fluid. Each splat is not just a dot; it's a miniaturized, adjustable element of a larger visual narrative. Now that we have covered the basic parameters we will now be understanding how Gaussian splatting actaully works, we'll also be looking at some very interesting frameworks that are used when we work with these technlogies. This was the first blog in a series of blogs that will be focussed on Gaussian Splatting. Stay tuned for more such interesting blogs.<br><br><br><br>
 
 
 
@@ -185,50 +248,9 @@ When these parameters—position, covariance, color, and alpha—work together, 
         </article>
 
         <footer>
-            <p>© 2024 Jai Tyagi | <a href="index.html">Back to Home</a></p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <span class="copyright">© 2025  Jai Tyagi</span>
         </footer>
     </div>
-
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const icon = themeToggle.querySelector('i');
-        const images = document.querySelectorAll('img');
-
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-theme');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-            updateImages('light');
-        }
-
-        function updateImages(theme) {
-            images.forEach(img => {
-                const newSrc = theme === 'light' ? 
-                    img.dataset.lightSrc : 
-                    img.dataset.darkSrc;
-                if (newSrc) {
-                    img.src = newSrc;
-                }
-            });
-        }
-
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            const isLight = document.body.classList.contains('light-theme');
-            
-            if (isLight) {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-                updateImages('light');
-                localStorage.setItem('theme', 'light');
-            } else {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-                updateImages('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-    </script>
 </body>
 </html>

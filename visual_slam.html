@@ -6,72 +6,103 @@
     <meta name="description" content="Visual SLAM">
     <title>Visual-SLAM: How does it work?</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'SF Mono';
-            src: url('https://fonts.cdnfonts.com/s/18047/SFMono-Regular.woff') format('woff');
-        }
-
         :root {
             --primary-color: #05f140;
-            --bg-dark: #121212;
+            --bg-dark: #030712;
             --text-dark: #f1f1f1ea;
-            --bg-light: #f1f1f1;
-            --text-light: #121212;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-dark);
-            font-family: 'SF Mono', monospace;
+            font-family: 'Crimson Text', serif;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.8;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(45deg, #010409, #0a0f1e, #0d1117);
+            opacity: 1;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            border-radius: 50%;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .star.white {
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .star.blue {
+            background: radial-gradient(circle at center, rgba(147, 197, 253, 0.9) 0%, transparent 100%);
+            box-shadow: 0 0 3px rgba(147, 197, 253, 0.5);
+            width: 1.5px;
+            height: 1.5px;
+        }
+
+        @keyframes twinkle {
+            0%, 50%, 100% { 
+                opacity: 1;
+                background-position: 0 0;
+            }
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        nav {
-            padding: 20px 0;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .theme-toggle {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dark);
-            transition: all 0.3s;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
         }
 
         article {
             text-align: justify;
             margin-bottom: 40px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
         }
 
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .post-meta {
-            color: #888;
+            color: #93c5fd;
             margin-bottom: 30px;
+            font-family: 'Crimson Text', serif;
+            font-style: italic;
+            font-size: 1.1em;
         }
 
         a {
@@ -82,97 +113,104 @@
 
         a:hover {
             text-decoration: underline;
+            color: #00ff9d;
         }
 
         footer {
-            margin-top: 40px;
+            margin-top: 60px;
             padding: 20px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'Crimson Text', serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Light theme overrides */
-        body.light-theme {
-            background-color: var(--bg-light);
-            color: var(--text-light);
+        .back-link {
+            color: #93c5fd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
         }
 
-        body.light-theme .theme-toggle {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-light);
+        .back-link:hover {
+            color: #60a5fa;
+            transform: translateX(-5px);
         }
 
-        body.light-theme footer {
-            border-top-color: rgba(0, 0, 0, 0.1);
+        .copyright {
+            opacity: 0.8;
+        }
+
+        /* Remove theme toggle */
+        .theme-toggle {
+            display: none;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backgroundPattern = document.querySelector('.background-pattern');
+            const numWhiteStars = 110;
+            const numBlueStars = 40;
+
+            function createStar(isBlue = false) {
+                const star = document.createElement('div');
+                star.className = `star ${isBlue ? 'blue' : 'white'}`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                return star;
+            }
+
+            // Create white stars
+            for (let i = 0; i < numWhiteStars; i++) {
+                backgroundPattern.appendChild(createStar());
+            }
+
+            // Create blue stars
+            for (let i = 0; i < numBlueStars; i++) {
+                backgroundPattern.appendChild(createStar(true));
+            }
+        });
+    </script>
 </head>
 <body>
+    <div class="background-pattern"></div>
     <div class="container">
-        <nav>
-            <a href="index.html">← Back to Home</a>
-            <button id="theme-toggle" class="theme-toggle">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-
-        <header>
+        <div class="blog-header">
             <h1>Visual-SLAM: How does it work?</h1>
-            <div class="post-meta">Posted on 24 September, 2024</div>
-        </header>
+            <div class="post-meta">Posted on September 24, 2024</div>
+        </div>
 
         <article>
             <p>
-                Visual-SLAM (Simultaneous Localization and Mapping) is an essential technology that helps systems like robots, drones, or even autonomous vehicles build a map of their surroundings while simultaneously determining their own position within that space. The concept might sound simple, but it’s a significant technical challenge because the system has to continuously calculate its location as it moves through a changing environment. Visual-SLAM, in particular, uses camera data to achieve this, making it a preferred solution for devices that need to operate in real-time while keeping hardware costs low.<br/><br/>
+                Visual-SLAM (Simultaneous Localization and Mapping) is an essential technology that helps systems like robots, drones, or even autonomous vehicles build a map of their surroundings while simultaneously determining their own position within that space. The concept might sound simple, but it's a significant technical challenge because the system has to continuously calculate its location as it moves through a changing environment. Visual-SLAM, in particular, uses camera data to achieve this, making it a preferred solution for devices that need to operate in real-time while keeping hardware costs low.<br/><br/>
 
-                To understand how Visual-SLAM works, imagine walking through an unfamiliar room with a camera. As you move, the camera captures images of the environment—walls, furniture, and objects scattered around. Visual-SLAM uses this stream of images to pick out unique points or landmarks within the room. These points could be the corners of a table, the edge of a window, or any detail that remains recognizable as the camera shifts angles. This is known as "feature extraction." Once these features are identified, the system tracks their movement from frame to frame, calculating how far they’ve moved and, by extension, how far the camera itself has moved.<br/><br/>
+                To understand how Visual-SLAM works, imagine walking through an unfamiliar room with a camera. As you move, the camera captures images of the environment—walls, furniture, and objects scattered around. Visual-SLAM uses this stream of images to pick out unique points or landmarks within the room. These points could be the corners of a table, the edge of a window, or any detail that remains recognizable as the camera shifts angles. This is known as "feature extraction." Once these features are identified, the system tracks their movement from frame to frame, calculating how far they've moved and, by extension, how far the camera itself has moved.<br/><br/>
 
-                A key aspect of SLAM is the use of these visual landmarks to build a map. As the device moves and the camera captures new parts of the scene, the system adds newly discovered features to its internal map. At the same time, it also tries to match the new images with previously captured ones to avoid duplicating landmarks. This process of continuously updating the map while keeping track of the camera’s movement is what makes SLAM both powerful and complex.<br/><br/>
+                A key aspect of SLAM is the use of these visual landmarks to build a map. As the device moves and the camera captures new parts of the scene, the system adds newly discovered features to its internal map. At the same time, it also tries to match the new images with previously captured ones to avoid duplicating landmarks. This process of continuously updating the map while keeping track of the camera's movement is what makes SLAM both powerful and complex.<br/><br/>
 
-                Now, this is where ORB-SLAM comes in as an example of a well-known Visual-SLAM system. ORB-SLAM is short for Oriented FAST and Rotated BRIEF SLAM, and it’s a real-time Visual-SLAM solution that has been widely used in robotics and computer vision. ORB-SLAM excels because it is able to identify key points from images efficiently, and it does so using two algorithms—FAST (Features from Accelerated Segment Test) and BRIEF (Binary Robust Independent Elementary Features).<br/><br/>
-                FAST helps ORB-SLAM detect key points in the image, which are often sharp corners, strong edges, or other high-contrast areas that are easily trackable. BRIEF, on the other hand, is used to describe these key points by creating a unique “fingerprint” for each, allowing the system to recognize the same feature even if the camera looks at it from a different angle or distance. These key points are then matched across multiple frames, enabling ORB-SLAM to track the movement of the camera based on how the points shift relative to one another.<br/><br/>
+                Now, this is where ORB-SLAM comes in as an example of a well-known Visual-SLAM system. ORB-SLAM is short for Oriented FAST and Rotated BRIEF SLAM, and it's a real-time Visual-SLAM solution that has been widely used in robotics and computer vision. ORB-SLAM excels because it is able to identify key points from images efficiently, and it does so using two algorithms—FAST (Features from Accelerated Segment Test) and BRIEF (Binary Robust Independent Elementary Features).<br/><br/>
+                FAST helps ORB-SLAM detect key points in the image, which are often sharp corners, strong edges, or other high-contrast areas that are easily trackable. BRIEF, on the other hand, is used to describe these key points by creating a unique "fingerprint" for each, allowing the system to recognize the same feature even if the camera looks at it from a different angle or distance. These key points are then matched across multiple frames, enabling ORB-SLAM to track the movement of the camera based on how the points shift relative to one another.<br/><br/>
 
-                Once ORB-SLAM has a good set of key points, it uses them to estimate the camera’s position and orientation. This involves some complex math, where the system calculates how the key points move in 3D space relative to the camera’s motion. At the same time, ORB-SLAM uses this information to update its internal map of the environment. If the camera revisits an area it has seen before, ORB-SLAM can recognize the previously mapped features and correct its location estimate if necessary. This process, called "loop closure," helps reduce errors in the map over time, ensuring that it remains accurate even after long periods of use.<br/><br/>
+                Once ORB-SLAM has a good set of key points, it uses them to estimate the camera's position and orientation. This involves some complex math, where the system calculates how the key points move in 3D space relative to the camera's motion. At the same time, ORB-SLAM uses this information to update its internal map of the environment. If the camera revisits an area it has seen before, ORB-SLAM can recognize the previously mapped features and correct its location estimate if necessary. This process, called "loop closure," helps reduce errors in the map over time, ensuring that it remains accurate even after long periods of use.<br/><br/>
 
                 An important aspect of ORB-SLAM is that it can work with different types of cameras. It supports monocular cameras, which capture regular 2D images, stereo cameras, which provide depth information by using two lenses, and RGB-D cameras, which combine color images with depth data. By working with these different camera types, ORB-SLAM can be used in a variety of applications, from simple robots using a single webcam to advanced drones or autonomous vehicles with more sophisticated cameras.<br/><br/>
 
                 The beauty of Visual-SLAM, especially in the case of ORB-SLAM, is that it doesn't rely on costly sensors like LIDAR, which is commonly used in other SLAM systems. Instead, it uses affordable cameras that are much easier to integrate into small, lightweight devices. This makes Visual-SLAM especially useful for consumer-grade robotics, drones, and even augmented reality (AR) applications, where devices need to understand the space around them in real-time without expensive hardware.<br/><br/>
 
-                Visual-SLAM is widely used today in robotics and drones, but its applications are expanding. For example, augmented reality devices like Microsoft’s HoloLens and even mobile apps that offer AR functionality use similar techniques to place virtual objects within a physical environment. In these cases, Visual-SLAM helps the device understand where walls, floors, and other surfaces are, so virtual objects can interact with the real world in a convincing way.<br/><br/>
+                Visual-SLAM is widely used today in robotics and drones, but its applications are expanding. For example, augmented reality devices like Microsoft's HoloLens and even mobile apps that offer AR functionality use similar techniques to place virtual objects within a physical environment. In these cases, Visual-SLAM helps the device understand where walls, floors, and other surfaces are, so virtual objects can interact with the real world in a convincing way.<br/><br/>
 
                 P.S. This is my first blog, please pardon any oversights or mistakes. I'll try to make my writing better and beginner friendly with my upcoming blogs, also I will be delving deeper in the working of SLAM in upcoming work.
             </p>
         </article>
 
         <footer>
-            <p>© 2024 Jai Tyagi | <a href="index.html">Back to Home</a></p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <span class="copyright">© 2025  Jai Tyagi</span>
         </footer>
     </div>
-
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const icon = themeToggle.querySelector('i');
-
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-theme');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            const isLight = document.body.classList.contains('light-theme');
-            
-            if (isLight) {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-                localStorage.setItem('theme', 'light');
-            } else {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-    </script>
 </body>
 </html>

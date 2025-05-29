@@ -6,29 +6,70 @@
     <meta name="description" content="Profile website of Jai Tyagi">
     <title>yo!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'SF Mono';
-            src: url('https://fonts.cdnfonts.com/s/18047/SFMono-Regular.woff') format('woff');
-        }
-
         :root {
-            --primary-color: #05f140;
-            --bg-dark: #121212;
+            --primary-color: #60a5fa;
+            --accent-color: #93c5fd;
+            --bg-dark: #030712;
             --text-dark: #f1f1f1ea;
-            --bg-light: #f1f1f1;
-            --text-light: #121212;
         }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-dark);
-            font-family: 'SF Mono', monospace;
+            font-family: 'Crimson Text', serif;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.8;
             transition: all 0.3s ease;
             position: relative;
+            font-size: 18px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(45deg, #010409, #0a0f1e, #0d1117);
+            opacity: 1;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            border-radius: 50%;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .star.white {
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .star.blue {
+            background: radial-gradient(circle at center, rgba(147, 197, 253, 0.9) 0%, transparent 100%);
+            box-shadow: 0 0 3px rgba(147, 197, 253, 0.5);
+            width: 1.5px;
+            height: 1.5px;
+        }
+
+        @keyframes twinkle {
+            0%, 50%, 100% { 
+                opacity: 1;
+                background-position: 0 0;
+            }
         }
 
         .container {
@@ -54,17 +95,26 @@
             gap: 20px;
         }
 
-        a {
+        .nav-links a {
             color: var(--primary-color);
             text-decoration: none;
-            transition: all 0.3s ease;
             position: relative;
+            transition: color 0.3s ease;
         }
 
-        a:hover {
-            color: var(--primary-color);
-            opacity: 0.8;
-            transform: translateY(-1px);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .header-content {
@@ -73,11 +123,18 @@
             position: relative;
             margin-bottom: 40px;
             animation: fadeIn 0.8s ease-out;
+            text-align: center;
         }
 
         .header-content h1 {
             margin-bottom: 15px;
-            font-size: 2.5em;
+            font-size: 4.2em;
+            background: linear-gradient(45deg, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease-out;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
         }
 
         .projects-grid {
@@ -92,20 +149,27 @@
             border-radius: 16px;
             padding: 30px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .project-card:hover {
             transform: translateY(-10px) scale(1.02);
             background: rgba(255, 255, 255, 0.06);
-            border-color: var(--primary-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 30px rgba(96, 165, 250, 0.15);
         }
 
         .project-card h3 {
             margin-top: 0;
             margin-bottom: 15px;
-            color: var(--primary-color);
+            color: var(--accent-color);
+            font-size: 1.4em;
+        }
+
+        .project-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
         }
 
         .social-links {
@@ -126,52 +190,7 @@
         }
 
         .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(5, 241, 64, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(5, 241, 64, 0.1);
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dark);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(90deg) scale(1.1);
-            background: rgba(5, 241, 64, 0.15);
-        }
-
-        .background-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%,
-                rgba(5, 241, 64, 0.05) 0%,
-                transparent 50%),
-                radial-gradient(circle at 80% 20%,
-                rgba(5, 241, 64, 0.03) 0%,
-                transparent 40%);
-            animation: gradientMove 20s ease infinite;
-            opacity: 0.4;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
+            display: none;
         }
 
         .section {
@@ -191,10 +210,11 @@
         }
 
         .header-subtitle {
-            font-size: 1.2em;
+            font-size: 1.6em;
             color: var(--text-dark);
-            opacity: 0.7;
+            opacity: 0.9;
             margin: 15px 0;
+            font-family: 'Crimson Text', serif;
         }
 
         .header-tags {
@@ -205,18 +225,19 @@
         }
 
         .tag {
-            background: rgba(5, 241, 64, 0.08);
+            background: rgba(96, 165, 250, 0.1);
             padding: 8px 16px;
             border-radius: 12px;
-            font-size: 0.9em;
-            color: var(--primary-color);
-            border: 1px solid rgba(5, 241, 64, 0.1);
+            font-size: 1.1em;
+            color: var(--accent-color);
+            border: 1px solid rgba(96, 165, 250, 0.2);
             transition: all 0.3s ease;
             backdrop-filter: blur(4px);
+            font-family: 'Crimson Text', serif;
         }
 
         .tag:hover {
-            background: rgba(5, 241, 64, 0.12);
+            background: rgba(96, 165, 250, 0.15);
             transform: translateY(-2px) scale(1.05);
         }
 
@@ -226,7 +247,8 @@
         }
 
         .blogs-list li {
-            margin-bottom: 15px;
+            font-size: 1.2em;
+            margin-bottom: 20px;
             padding: 15px;
             border-radius: 8px;
             transition: all 0.3s ease;
@@ -240,7 +262,7 @@
         .blogs-list li a:before {
             content: ">";
             margin-right: 10px;
-            color: var(--primary-color);
+            color: var(--accent-color);
         }
 
         footer {
@@ -250,57 +272,6 @@
             padding: 30px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 60px;
-        }
-
-        /* Light theme styles */
-        body.light-theme {
-            background-color: var(--bg-light);
-            color: var(--text-light);
-        }
-
-        body.light-theme a {
-            color: #1a5f7a;
-        }
-
-        body.light-theme .project-card {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .project-card h3 {
-            color: #1a5f7a;
-        }
-
-        body.light-theme .theme-toggle {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-light);
-        }
-
-        body.light-theme .background-pattern {
-            background: 
-                linear-gradient(90deg, var(--bg-light) 21px, transparent 1%) center,
-                linear-gradient(var(--bg-light) 21px, transparent 1%) center,
-                rgba(0, 0, 0, 0.03);
-            background-size: 24px 24px;
-        }
-
-        body.light-theme .header-subtitle {
-            color: var(--text-light);
-            opacity: 0.7;
-        }
-
-        body.light-theme .blogs-list li:hover {
-            background: rgba(0, 0, 0, 0.03);
-        }
-
-        body.light-theme .tag {
-            background: rgba(26, 95, 122, 0.1);
-            color: #1a5f7a;
-            border-color: rgba(26, 95, 122, 0.2);
-        }
-
-        body.light-theme .blogs-list li a:before {
-            color: #1a5f7a;
         }
 
         @keyframes fadeIn {
@@ -314,21 +285,6 @@
             }
         }
 
-        /* Smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Enhanced header animation */
-        .header-content h1 {
-            font-size: 3.5em;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, var(--primary-color), #00ff9d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -340,73 +296,94 @@
             }
         }
 
-        /* Smooth link hover effect */
-        .nav-links a {
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        .intro {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .intro h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-hover);
+        }
+
+        .content {
+            margin-top: 2rem;
+        }
+
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
             position: relative;
-            padding-bottom: 5px;
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
+        a:hover {
+            color: var(--accent-color);
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
+        .project-card a {
+            display: inline-block;
+            margin-top: 10px;
         }
 
-        /* Header gradient text for light theme */
-        body.light-theme .header-content h1 {
-            background: linear-gradient(45deg, #1a5f7a, #2c3e50);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .project-card a:hover {
+            transform: translateX(5px);
         }
 
-        /* Section animations for dark theme */
-        .section {
-            position: relative;
-            padding: 40px 0;
-            margin-bottom: 40px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: sectionFadeIn 0.8s ease-out forwards;
-        }
-
-        /* Nav link underline effect - dark theme */
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-
-        /* Light theme overrides */
-        body.light-theme .nav-links a::after {
-            background-color: #1a5f7a;  /* Match the light theme color */
-        }
-
-        body.light-theme .blogs-list li a:before {
-            color: #1a5f7a;
-        }
-
-        body.light-theme a {
-            color: #1a5f7a;
-        }
-
-        body.light-theme a:hover {
-            color: #1a5f7a;
+        .social-links a:hover {
+            transform: translateY(-3px);
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backgroundPattern = document.querySelector('.background-pattern');
+            const numWhiteStars = 110;
+            const numBlueStars = 40;
+
+            function createStar(isBlue = false) {
+                const star = document.createElement('div');
+                star.className = `star ${isBlue ? 'blue' : 'white'}`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                return star;
+            }
+
+            // Create white stars
+            for (let i = 0; i < numWhiteStars; i++) {
+                backgroundPattern.appendChild(createStar());
+            }
+
+            // Create blue stars
+            for (let i = 0; i < numBlueStars; i++) {
+                backgroundPattern.appendChild(createStar(true));
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="background-pattern"></div>
@@ -416,33 +393,22 @@
                 <a href="#about">About</a>
                 <a href="#projects">Projects</a>
                 <a href="#blogs">Blogs</a>
+                <!-- <a href="https://github.com/jaityagi" target="_blank">GitHub</a> -->
             </div>
         </nav>
-
-        <button id="theme-toggle" class="theme-toggle">
-            <i class="fas fa-sun"></i>
-        </button>
-
         <header class="header-content">
-            <h1>hi, my name is Jai</h1>
-            <p class="header-subtitle">turning caffeine into code since 2020</p>
-            <div class="header-tags">
-                <span class="tag">computer vision</span>
-                <span class="tag">SLAM</span>
-                <span class="tag">robotics</span>
-                <span class="tag">deep learning</span>
-                <span class="tag">coffee enthusiast</span>
-            </div>
-            <p>building stuff that helps machines understand the world like we do.</p>
+            <h1>Hi, I am Jai</h1>
+            <p class="header-subtitle">Turning caffeine into code since 2020</p>
+            <p>Building stuff that helps machines understand the world like we do.</p>
         </header>
 
         <section id="about" class="section">
-            <h2>about me</h2>
-            <p>hello, i am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. i also try to read papers in my free time. i have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. along wth some friends, i started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. at underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume.</a></p>
+            <h2>About me</h2>
+            <p>Hello, I am a final year undergrad student studying machine learning & computer vision and working up on some other interesting stuff. I also try to read papers in my free time. I have a deep interest in SLAM and also worked on an interesting project at IIT Delhi recently. along wth some friends, I started an online lab, <a href="https://underscoreai.xyz/">underscoreai</a>. at underscoreai, we generally write about stuff we work & research on. Here's my <a href="https://drive.google.com/file/d/1xXGqpj6Vvgp14IPCoD2xB2KwhBTGRaIr/view?usp=sharing">resume.</a></p>
         </section>
 
         <section id="projects" class="section">
-            <h2>projects</h2>
+            <h2>Projects</h2>
             <div class="projects-grid">
                 <div class="project-card">
                     <h3>Digital Heritage</h3>
@@ -464,43 +430,31 @@
                     <p>an arcade-style rhythm game inspired by Dance Dance Revolution.</p>
                     <a href="https://github.com/Jai132/Symphonyv0.1">Learn More →</a>
                 </div>
+                <!-- <div class="project-card">
+                    <h3>Vox-Splat</h3>
+                    <p>A viewer for Gaussian Splatting files and outputs. Supports viewing .ply and .splat files for now.</p>
+                    <a href="https://github.com/Jai132/Symphonyv0.1">Learn More →</a>
+                </div> -->
             </div>
         </section>
 
         <section id="blogs" class="section">
-            <h2>blogs</h2>
+            <h2>Blogs</h2>
             <ul class="blogs-list">
                 <li><a href="visual_slam.html">Visual-SLAM: How does it work?</a></li>
                 <li><a href="understanding_geometry.html">Understanding 3-D Geometry for Robotics</a></li>
                 <li><a href="gaussian_splatting.html">Basic Parameters of Gaussian Splatting</a></li>
             </ul>
         </section>
-
-        <hr>
-
-        <footer>
-            <p>© 2025 Jai Tyagi </p>
-            <div class="social-links">
-                <a href="https://github.com/Jai132" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="www.linkedin.com/in/jai-tyagi-op" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="mailto:jaityagi132@gmail.com"><i class="fas fa-envelope"></i></a>
-            </div>
-        </footer>
     </div>
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const icon = themeToggle.querySelector('i');
-
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            if (document.body.classList.contains('light-theme')) {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            } else {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
-        });
-    </script>
+    <!-- <hr> -->
+    <footer>
+        <p>© 2025 Jai Tyagi </p>
+        <div class="social-links">
+            <a href="https://github.com/Jai132" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="www.linkedin.com/in/jai-tyagi-op" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:jaityagi132@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
 </body>
 </html>
